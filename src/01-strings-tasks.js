@@ -235,8 +235,8 @@ function encodeToRot13(str) {
   const lettersInWords = str.split(' ').map((word) => word.split(''));
   const result = [];
 
-  for (let index = 0; index < lettersInWords.length; index++) {
-    const word = lettersInWords[index];
+  for (let i = 0; i < lettersInWords.length; i += 1) {
+    const word = lettersInWords[i];
     const encodeLetters = word.map((letter) => {
       if (encodeAbc.indexOf(letter) + 1) {
         return encodeAbc[abc.indexOf(letter)];
