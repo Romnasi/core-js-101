@@ -300,8 +300,24 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const reversedNumbers = ccn.toString().split('').reverse();
+  const resultSum = reversedNumbers.reduce((acc, curVal, i) => {
+    let curNumber = parseInt(curVal, 10);
+    const isOdd = (i + 1) % 2 !== 0;
+    if (!isOdd) {
+      curNumber *= 2;
+      if (curNumber > 9) {
+        curNumber = (Math.floor(curNumber / 10)) + (curNumber % 10);
+      }
+    }
+    return acc + curNumber;
+  }, 0);
+
+  if (resultSum % 10 === 0) {
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -318,8 +334,18 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  let curNum = num;
+  let sum = 10;
+  while (sum > 9) {
+    const numbers = curNum.toString().split('');
+    sum = numbers.reduce((acc, curVal) => {
+      const curNumber = parseInt(curVal, 10);
+      return acc + curNumber;
+    }, 0);
+    curNum = sum;
+  }
+  return sum;
 }
 
 
@@ -344,8 +370,74 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+
+const bracketsBalance = {
+  square: 0,
+  round: 0,
+  curly: 0,
+  angle: 0,
+};
+
+const getBracketInfo = (bracket) => {
+  switch (bracket) {
+    case '[':
+      return { name: 'square', type: 'open' };
+    case ']':
+      return { name: 'square', type: 'close' };
+    case '(':
+      return { name: 'round', type: 'open' };
+    case ')':
+      return { name: 'round', type: 'close' };
+    case '{':
+      return { name: 'curly', type: 'open' };
+    case '}':
+      return { name: 'curly', type: 'close' };
+    case '<':
+      return { name: 'angle', type: 'open' };
+    case '>':
+      return { name: 'angle', type: 'close' };
+    default:
+      return null;
+  }
+};
+
+
+const checkBracket = (bracket) => {
+  const bracketInfo = getBracketInfo(bracket);
+  if (bracketInfo === null) {
+    return true;
+  }
+  const { name, type } = bracketInfo;
+  if (type === 'open') {
+    bracketsBalance[name] += 1;
+  }
+  if (type === 'close') {
+    bracketsBalance[name] += -1;
+
+    if (bracketsBalance[name] < 0) {
+      return false;
+    }
+  }
+  return true;
+};
+
+
+function isBracketsBalanced(str) {
+  const brackets = str.split('');
+  for (let i = 0; i < brackets.length; i += 1) {
+    const bracket = brackets[i];
+    if (!checkBracket(bracket)) {
+      return false;
+    }
+  }
+  const {
+    square, round, curly, angle,
+  } = bracketsBalance;
+
+  return square === 0
+    && round === 0
+    && curly === 0
+    && angle === 0;
 }
 
 
@@ -369,8 +461,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
 
 
