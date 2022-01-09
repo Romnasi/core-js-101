@@ -560,8 +560,54 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+const checkHasEmpty = (line) => line.join('').length < 3;
+const checkEveryO = (line) => line.every((el) => el === '0');
+const checkEveryX = (line) => line.every((el) => el === 'X');
+
+const checkLine = (line) => {
+  if (checkHasEmpty(line)) {
+    return undefined;
+  }
+  if (checkEveryO(line)) {
+    return '0';
+  }
+  if (checkEveryX(line)) {
+    return 'X';
+  }
+  return 'draw';
+};
+
+function evaluateTicTacToePosition(position) {
+  const topLeftDiagonal = [position[0][0], position[1][1], position[2][2]];
+  const topRightDiagonal = [position[0][2], position[1][1], position[2][0]];
+
+  const matrixSize = [0, 1, 2];
+
+  const topLeftDiagonalsResult = checkLine(topLeftDiagonal);
+  if (topLeftDiagonalsResult !== 'draw' && topLeftDiagonalsResult !== undefined) {
+    return topLeftDiagonalsResult;
+  }
+
+  const topRightDiagonalsResult = checkLine(topRightDiagonal);
+  if (topRightDiagonalsResult !== 'draw' && topRightDiagonalsResult !== undefined) {
+    return topRightDiagonalsResult;
+  }
+
+  for (let i = 0; i < matrixSize.length; i += 1) {
+    const currentRow = position[i];
+    const currentRowResult = checkLine(currentRow);
+    if (currentRowResult !== 'draw' && currentRowResult !== undefined) {
+      return currentRowResult;
+    }
+
+    const currentColumn = [position[0][i], position[1][i], position[2][i]];
+    const currentColumnResult = checkLine(currentColumn);
+    if (currentColumnResult !== 'draw' && currentColumnResult !== undefined) {
+      return currentColumnResult;
+    }
+  }
+
+  return undefined;
 }
 
 
